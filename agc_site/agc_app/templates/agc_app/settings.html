@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+
+{% load static %}
+
+{% if password_not_matching_error %}
+<script> alert("Two passwords do not match! Try writing again.") </script>
+{% endif %}
+
+{% if user_already_exists_error %}
+<script> alert("This username already exists. Try using a different username!") </script>
+{% endif %}
+
+<!---------------------------------------------------------------------------------------->
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{% static 'font_awesome5/css/all.min.css' %}">
+
+
+<head>
+
+{% include './components/navbar.html' %}
+
+</head>
+
+<body>
+
+<!--------------------------------------------------------------------------------->
+
+<!--------------------------------------------------------------------------------->
+
+
+<script>
+ $(document).ready(function(){
+    $('select').formSelect();
+ });
+</script>
+
+<form action="{% url 'settings' %}" method="post" enctype="multipart/form-data" style="margin-top:16px;"> {% csrf_token %}
+  <div class="container">
+    <h2>Settings</h2>
+
+    <label for="profile_photo"><b>Change Profile Photo</b><br>
+    <input name="profile_photo" type="file">
+      </label>
+
+    <br>
+
+    <label for="name"><b>Full Name</b><br>
+    <input name="name" type="text" placeholder="Enter your name" value="{{ me.name }}" maxlength="32" required>
+      </label>
+
+    <br>
+
+    <label for="username"><b>Username (you cannot change it later)</b><br>
+    <input name="username" type="text" placeholder="Enter Username" value="{{ me.username }}" maxlength="32" required disabled>
+      </label>
+
+    <br>
+
+    <label for="email"><b>Email</b><br>
+    <input name="email" type="email" placeholder="Enter your email" value="{{ me.email }}" required>
+      </label>
+
+    <br>
+
+    <label for="password"><b>Password</b><br>
+    <input name="password" type="password" placeholder="Enter Password" value="{{ me.password }}" maxlength="32" required>
+      </label>
+
+    <br>
+
+    <label for="password_again"><b>Again Password</b><br>
+    <input name="password_again" type="password" placeholder="Enter Password again" value="{{ me.password }}" maxlength="32" required>
+      </label>
+
+    <br>
+
+  <div class="input-field col s12"><br>
+
+    <select name="account_type" required>
+      <option value="" disabled selected>I am a ...</option>
+      <option value="0">Client</option>
+      <option value="1">Contractor</option>
+      <option value="2">Corporate</option>
+    </select>
+    <label for="account_type">Who are you? (edit)</label>
+  </div>
+
+    <br>
+
+    <button type="submit" class="waves-effect waves-light btn btn-dark">Apply Changes</button>
+  </div>
+</form>
+<!---------------------------------------------------------------------------------------------->
+
+</body>
+</html>

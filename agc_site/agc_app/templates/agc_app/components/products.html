@@ -1,0 +1,156 @@
+
+<!-- BUY BUTTON WITH PRODUCT CARDS -->
+
+{% load static %}
+
+<style>
+
+/* Float four columns side by side */
+.products-column {
+ float: left;
+ width: 49%;
+ padding: 0.5% 0.5%;
+}
+
+.products-row {margin: 0 -5px;}
+
+/* Clear floats after the columns */
+.products-row:after {
+ content: "";
+ display: table;
+ clear: both;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 1000px) {
+ .products-column {
+ width: 100%;
+ display: block;
+ margin-bottom: 10px;
+ }
+}
+
+/* Style the counter cards */
+.products-card {
+ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+ padding: 16px;
+ text-align: center;
+ background-color: #161B1F; // #444;
+ color: white;
+ border-radius: 4px;
+}
+
+.products-card .fa {font-size:50px;}
+
+.product-photo {
+ width: 532px;
+ height: 532px;
+}
+
+.product-name {
+ color: #ccc;
+}
+
+.product-price {
+ color: #aaa;
+}
+
+.product-description {
+ // overflow-y: scroll;
+ height: 262px;
+}
+
+.add-to-cart-button {
+ border-radius: 8px;
+ border: 1px solid #ccc;
+ outline: 0;
+ padding: 12px;
+ color: #ccc;
+ background-color: #161B1F;
+ text-align: center;
+ cursor: pointer;
+ width: 100%;
+ font-size: 18px;
+ transition: background-color 1s ease;
+}
+.add-to-cart-button:hover {
+ border: 1px solid #161B1F;
+ color: #161B1F;
+ background-color: #ccc;
+}
+
+</style>
+
+<div class="products-row">
+
+
+ <div class="products-column">
+ <div class="products-card">
+   <h2 class="product-name">Special bihari ceement with extra chips</h2>
+ <p><img class="product-photo" src="{% static 'house_photo.jpg' %}"/></p>
+  <p class="product-price">300 Rs / Roti</p>
+  <p class="product-description">Description about thiws product................</p>
+  <p><button class="add-to-cart-button">Add to cart</button></p>
+ </div>
+ </div>
+
+ <div class="products-column">
+ <div class="products-card">
+   <h2 class="product-name">55+</h2>
+ <p><img class="product-photo" src="{% static 'hitler.jpg' %}"/></p>
+  <p class="product-price">300 Rs / Meter</p>
+  <p class="product-description">Description about thiws product................</p>
+  <p><button class="add-to-cart-button">Add to cart</button></p>
+ </div>
+ </div>
+
+ <div class="products-column">
+ <div class="products-card">
+   <h2 class="product-name">100+</h2>
+ <p><img class="product-photo" src="{% static 'lucas_perez_building.jpg' %}"/></p>
+  <p class="product-price">300 Rs / Noth</p>
+  <p class="product-description">Description about thiws product................</p>
+  <p><button class="add-to-cart-button">Add to cart</button></p>
+ </div>
+ </div>
+
+
+</div>
+
+
+
+
+<!-- Buy button -->
+
+<style>
+ /* The dots/bullets/indicators */
+.buy_dot {
+  cursor: pointer;
+  position: fixed;
+  bottom:0;
+  right:0;
+  padding: 16px;
+  height: 42px;
+  width: 42px;
+  font-size: 24px;
+  text-align: center;
+  margin: 0 2px;
+  background-color: orange; // #ccc;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 1s ease;
+}
+
+/* Add a background color to the active dot/circle */
+.buy_dot:hover {
+  background-color: #161B1F; // #717171;
+  color: #ccc;
+}
+</style>
+
+
+
+
+<hr>
+<!-- TODO: LINK IT WITH PRODUCTS THROUGH INPUT TYPE=HIDDEN AND JS (hidden is true, and becomes unhidden by js when added to cart) -->
+<span class="buy_dot"><span class="fa fa-paper-plane"></span>Go!</span>

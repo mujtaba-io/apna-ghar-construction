@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    {%  include './components/back_nav.html' %}
+</head>
+
+<body>
+
+
+
+
+
+
+<!-------------------------------------------------------------------------------->
+{% if contract.by_user == me %}
+<!-- The Modal: for editing details -->
+<div class="modal fade" id="edit_details_modal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Contract Details</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+        <form action="{% url 'contract' contract.pk %}" method="post">{% csrf_token %}
+      <!-- Modal body -->
+      <div class="modal-body">
+
+        <label for="site_address"><b>Site Address</b><br>
+    <input name="site_address" type="text" placeholder="House 123, Street 32 .." value="{{ contract.site_address }}">
+      </label>
+
+      <label for="description"><b>Description</b><br>
+          <textarea name="description" placeholder="Describe what you want?" rows="6" cols="60">{{ contract.description }}</textarea>
+      </label>
+
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="submit" name="contract_details_update" class="btn btn-danger">Update</button>
+      </div>
+        </form>
+
+    </div>
+  </div>
+</div>
+{% endif %}
+<!-------------------------------------------------------------------------------->
+
+
+
+
+
+
+<style>
+    body{
+    margin-top:20px;
+    color: #484b51;
+}
+.text-secondary-d1 {
+    color: #728299!important;
+}
+.page-header {
+    margin: 0 0 1rem;
+    padding-bottom: 1rem;
+    padding-top: .5rem;
+    border-bottom: 1px dotted #e2e2e2;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -ms-flex-align: center;
+    align-items: center;
+}
+.page-title {
+    padding: 0;
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 300;
+}
+.brc-default-l1 {
+    border-color: #dce9f0!important;
+}
+
+.ml-n1, .mx-n1 {
+    margin-left: -.25rem!important;
+}
+.mr-n1, .mx-n1 {
+    margin-right: -.25rem!important;
+}
+.mb-4, .my-4 {
+    margin-bottom: 1.5rem!important;
+}
+
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(0,0,0,.1);
+}
+
+.text-grey-m2 {
+    color: #888a8d!important;
+}
+
+.text-success-m2 {
+    color: #86bd68!important;
+}
+
+.font-bolder, .text-600 {
+    font-weight: 600!important;
+}
+
+.text-110 {
+    font-size: 110%!important;
+}
+.text-blue {
+    color: #478fcc!important;
+}
+.pb-25, .py-25 {
+    padding-bottom: .75rem!important;
+}
+
+.pt-25, .py-25 {
+    padding-top: .75rem!important;
+}
+.bgc-default-tp1 {
+    background-color: rgba(121,169,197,.92)!important;
+}
+.bgc-default-l4, .bgc-h-default-l4:hover {
+    background-color: #f3f8fa!important;
+}
+.page-header .page-tools {
+    -ms-flex-item-align: end;
+    align-self: flex-end;
+}
+
+.btn-light {
+    color: #757984;
+    background-color: #f5f6f9;
+    border-color: #dddfe4;
+}
+.w-2 {
+    width: 1rem;
+}
+
+.text-120 {
+    font-size: 120%!important;
+}
+.text-primary-m1 {
+    color: #4087d4!important;
+}
+
+.text-danger-m1 {
+    color: #dd4949!important;
+}
+.text-blue-m2 {
+    color: #68a3d5!important;
+}
+.text-150 {
+    font-size: 150%!important;
+}
+.text-60 {
+    font-size: 60%!important;
+}
+.text-grey-m1 {
+    color: #7b7d81!important;
+}
+.align-bottom {
+    vertical-align: bottom!important;
+}
+</style>
+
+
+
+
+
+
+
+<div class="page-content container">
+    <div class="page-header text-blue-d2">
+        <h1 class="page-title text-secondary-d1">
+            Contract
+            <small class="page-info">
+                <i class="fa fa-angle-double-right text-80"></i>
+                ID: #{{ contract.pk }}
+            </small>
+        </h1>
+
+        <div class="page-tools">
+            <div class="action-buttons">
+                <button class="btn bg-white btn-light mx-1px text-95" data-title="Print" onclick="window.print()">
+                    <i class="mr-1 fa fa-print text-primary-m1 text-120 w-2"></i>
+                    Print
+                </button>
+                {% if contract.by_user == me %}
+                <button class="btn bg-white btn-light mx-1px text-95" data-title="PDF" data-toggle="modal" data-target="#edit_details_modal">
+                    <i class="mr-1 fa fa-pen text-danger-m1 text-120 w-2"></i>
+                    EDIT
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="container px-0">
+        <div class="row mt-4">
+            <div class="col-12 col-lg-12">
+                <!-- .row -->
+
+                <hr class="row brc-default-l1 mx-n1 mb-4" />
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div>
+                            <span class="text-sm text-grey-m2 align-middle">By:</span>
+                            {% if contract.by_user == me %}
+                            <span class="text-600 text-110 text-success align-middle">You</span>
+                            {% else %}
+                            <span class="text-600 text-110 text-blue align-middle">{{ contract.by_user.name }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="text-grey-m2">
+                            <div class="my-1">
+                                <i class="fa fa-home fa-flip-horizontal text-secondary"></i>
+                                {{ contract.site_address }}
+                            </div>
+                            <div class="my-1"><i class="fa fa-phone fa-flip-horizontal text-secondary"></i> <b class="text-600">{{ contract.by_user.email }}</b></div>
+                            <div class="my-1"><i class="fa fa-phone fa-flip-horizontal text-secondary"></i> <b class="text-600">{{ contract.by_user.contact_number }}</b></div>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+
+                    <div class="text-95 col-sm-6 align-self-start d-sm-flex justify-content-end">
+                        <hr class="d-sm-none" />
+                        <div class="text-grey-m2">
+                            <div class="mt-1 mb-2 text-secondary-m1 text-600 text-125">
+                                Contract Details
+                            </div>
+
+                            <div>
+                            <span class="text-sm text-grey-m2 align-middle">To:</span>
+                            {% if contract.to_user == me %}
+                            <span class="text-600 text-110 text-success align-middle">You</span>
+                            {% else %}
+                            <span class="text-600 text-110 text-blue align-middle">{{ contract.to_user.name }}</span>
+                            {% endif %}
+                        </div>
+
+                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Date:</span> {{ contract.date }}</div>
+
+                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Confirmed:</span> <span class="badge badge-success badge-pill px-25">Yes</span></div>
+                            <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Completed:</span> <span class="badge badge-warning badge-pill px-25">No</span></div>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+
+                <div class="mt-4">
+                    <div class="row text-600 text-white bgc-default-tp1 py-25">
+                        <div class="d-none d-sm-block col-1">#</div>
+                        <div class="col-9 col-sm-5">Description</div>
+                        <div class="d-none d-sm-block col-4 col-sm-2">Products</div>
+                        <div class="d-none d-sm-block col-sm-2">Unit Price</div>
+                        <div class="col-2">Buying from</div>
+                    </div>
+
+                    <div class="text-95 text-secondary-d3">
+
+                        {% for transaction in contract.transaction_set.all %}
+                        <div class="row mb-2 mb-sm-0 py-25">
+                            <div class="d-none d-sm-block col-1">{{ transaction.pk }}</div>
+                            <div class="col-9 col-sm-5">{{ transaction.text }}</div>
+                            <div class="d-none d-sm-block col-2">{% for product in transaction.products.all %} {{ product.name }}, {% endfor %}</div>
+                            <div class="d-none d-sm-block col-2 text-95">{{ transaction.total_price }} Rs</div>
+                            <div class="col-2 text-secondary-d2">@{{ transaction.to_user.username }} ({% if transaction.is_confirmed %}<b style="color:green;">CONFIRMED</b>{% else %}<b style="color:red;">NOT CONFIRMED</b>{% endif %})</div>
+                        </div>
+                        {% endfor %}
+
+                        <div class="row mb-2 mb-sm-0 py-25">
+                        </div>
+
+                    </div>
+
+                    <div class="row border-b-2 brc-default-l2"></div>
+
+                    <hr>
+
+                    <div class="row mt-3">
+                        <div class="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
+                            <b>Contract Description:</b><br>
+                            {{ contract.description }}
+                        </div>
+
+                        <!--<div class="col-12 col-sm-5 text-grey text-90 order-first order-sm-last">
+                            <div class="row my-2">
+                                <div class="col-7 text-right">
+                                    SubTotal
+                                </div>
+                                <div class="col-5">
+                                    <span class="text-120 text-secondary-d1">$2,250</span>
+                                </div>
+                            </div>
+
+                            <div class="row my-2">
+                                <div class="col-7 text-right">
+                                    Tax (10%)
+                                </div>
+                                <div class="col-5">
+                                    <span class="text-110 text-secondary-d1">$225</span>
+                                </div>
+                            </div>-->
+
+                            <!--<div class="row my-2 align-items-center bgc-primary-l3 p-2">
+                                <div class="col-7 text-right">
+                                    Total Amount
+                                </div>
+                                <div class="col-5">
+                                    <span class="text-150 text-success-d3 opacity-2">123 Rs</span>
+                                </div>
+                            </div>-->
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div>
+                        <!--<button class="btn btn-info btn-bold px-4 float-right mt-3 mt-lg-0">Pay Now</button>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!---------------------- CHAT ----------------------------------->
+
+<STYLE>
+    body{
+    background:#eee;
+}
+.chat-list {
+    padding: 0;
+    font-size: .8rem;
+}
+
+.chat-list li {
+    margin-bottom: 10px;
+    overflow: auto;
+    color: #ffffff;
+}
+
+.chat-list .chat-img {
+    float: left;
+    width: 48px;
+}
+
+.chat-list .chat-img img {
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+    width: 100%;
+}
+
+.chat-list .chat-message {
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+    background: #5a99ee;
+    display: inline-block;
+    padding: 10px 20px;
+    position: relative;
+}
+
+.chat-list .chat-message:before {
+    content: "";
+    position: absolute;
+    top: 15px;
+    width: 0;
+    height: 0;
+}
+
+.chat-list .chat-message h5 {
+    margin: 0 0 5px 0;
+    font-weight: 600;
+    line-height: 100%;
+    font-size: .9rem;
+}
+
+.chat-list .chat-message p {
+    line-height: 18px;
+    margin: 0;
+    padding: 0;
+}
+
+.chat-list .chat-body {
+    margin-left: 20px;
+    float: left;
+    width: 70%;
+}
+
+.chat-list .in .chat-message:before {
+    left: -12px;
+    border-bottom: 20px solid transparent;
+    border-right: 20px solid #5a99ee;
+}
+
+.chat-list .out .chat-img {
+    float: right;
+}
+
+.chat-list .out .chat-body {
+    float: right;
+    margin-right: 20px;
+    text-align: right;
+}
+
+.chat-list .out .chat-message {
+    background: #fc6d4c;
+}
+
+.chat-list .out .chat-message:before {
+    right: -12px;
+    border-bottom: 20px solid transparent;
+    border-left: 20px solid #fc6d4c;
+}
+
+.card .card-header:first-child {
+    -webkit-border-radius: 0.3rem 0.3rem 0 0;
+    -moz-border-radius: 0.3rem 0.3rem 0 0;
+    border-radius: 0.3rem 0.3rem 0 0;
+}
+.card .card-header {
+    background: #17202b;
+    border: 0;
+    font-size: 1rem;
+    padding: .65rem 1rem;
+    position: relative;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.content{
+    margin-top:40px;
+}
+</STYLE>
+<div class="container content">
+    <div class="row">
+        <div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
+        	<div class="card">
+        		<div class="card-header">Chat</div>
+        		<div class="card-body height3">
+        			<ul class="chat-list">
+                        {% for message in contract.message_set.all %}
+                        {% if message.by_user == me %}
+        				<li class="in">
+        					<div class="chat-img">
+        						<img alt="Avtar" src="{{ message.by_user.profile_photo }}">
+        					</div>
+        					<div class="chat-body">
+        						<div class="chat-message">
+        							<h5>{{ message.by_user.name }}</h5>
+        							<p>{{ message.text }}</p>
+        						</div>
+        					</div>
+        				</li>
+                        {% else %}
+        				<li class="out">
+        					<div class="chat-img">
+        						<img alt="Avtar" src="{{ message.by_user.profile_photo }}">
+        					</div>
+        					<div class="chat-body">
+        						<div class="chat-message">
+        							<h5>{{ message.by_user.name }}</h5>
+        							<p>{{ message.text }}</p>
+        						</div>
+        					</div>
+        				</li>
+                        {% endif %}
+                        {% endfor %}
+        			</ul>
+        		</div>
+                <form action="{% url 'contract' contract.pk %}" method="post" style="text-align: center;">{% csrf_token %}
+                    <textarea name="message" placeholder="Type your message here" rows="3" style="width:100%; resize:none;"></textarea>
+                    <button type="submit" name="new_message" class="btn btn-info btn-bold px-4 mt-3 mt-lg-0">Send</button>
+                </form>
+        	</div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

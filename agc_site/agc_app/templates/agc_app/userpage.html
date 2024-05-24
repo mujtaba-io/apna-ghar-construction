@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+
+{% load static %}
+
+<!---------------------------------------------------------------------------------------->
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{% static 'font_awesome5/css/all.min.css' %}">
+
+
+<head>
+
+{% include './components/navbar.html' %}
+
+</head>
+
+<body>
+
+{% if transaction_for_unknown_contract %}
+<script>alert("This contract is not related to you! - Try making the transaction again with correct contract.")</script>
+{% endif %}
+
+{% if contract_does_not_exist %}
+<script>alert("Contract with this ID does not exist.")</script>
+{% endif %}
+
+{% if password_not_matching %}
+<script>alert("Passwords does not match.")</script>
+{% endif %}
+
+<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+<!-- ::::::::::::::::::::::::::::::::::PROFILE:::::::::::::::::::::::::::::::::::::::::::::: -->
+
+<style>
+
+.padding {
+    // padding: 2rem !important;
+    //margin-left: 200px
+}
+
+.card-img-top {
+    height: 400px
+}
+
+.card-no-border .card {
+    border-color: #d7dfe3;
+    border-radius: 4px;
+    margin-bottom: 30px;
+    -webkit-box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.05)
+}
+
+.card-body {
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.25rem
+}
+
+.pro-img {
+    margin-top: -80px;
+    margin-bottom: 20px
+}
+
+.little-profile .pro-img img {
+    width: 128px;
+    height: 128px;
+    -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 100%;
+}
+
+html body .m-b-0 {
+    margin-bottom: 0px
+}
+
+h3 {
+    line-height: 30px;
+    font-size: 21px
+}
+
+.btn-rounded.btn-md {
+    padding: 12px 35px;
+    font-size: 16px
+}
+
+html body .m-t-10 {
+    margin-top: 10px
+}
+
+.btn-primary,
+.btn-primary.disabled {
+    background: #7460ee;
+    border: 1px solid #7460ee;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(116, 96, 238, 0.14), 0 3px 1px -2px rgba(116, 96, 238, 0.2), 0 1px 5px 0 rgba(116, 96, 238, 0.12);
+    box-shadow: 0 2px 2px 0 rgba(116, 96, 238, 0.14), 0 3px 1px -2px rgba(116, 96, 238, 0.2), 0 1px 5px 0 rgba(116, 96, 238, 0.12);
+    -webkit-transition: 0.2s ease-in;
+    -o-transition: 0.2s ease-in;
+    transition: 0.2s ease-in
+}
+
+.btn-rounded {
+    border-radius: 60px;
+    padding: 7px 18px
+}
+
+.m-t-20 {
+    margin-top: 20px
+}
+
+.text-center {
+    text-align: center !important
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #455a64;
+    font-family: "Poppins", sans-serif;
+    font-weight: 400
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem
+}
+</style>
+
+<div class="padding">
+    <div class="col-md-16">
+        <!-- Column -->
+        <div class="card">
+            {% if user.type == 0 %}
+            <img class="card-img-top" src="{% static 'cityscape.jpg' %}" alt="Card image cap">
+            {% elif user.type == 1 %}
+            <img class="card-img-top" src="{% static 'lucas_perez_building.jpg' %}" alt="Card image cap">
+            {% elif user.type == 2 %}
+            <img class="card-img-top" src="{% static 'home-better.jpg' %}" alt="Card image cap">
+            {% endif %}
+
+            <div class="card-body little-profile text-center">
+                <div class="pro-img"><img src="{{ user.profile_photo }}" alt="user" style="border: 3px solid white; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5)"></div>
+                <h3 class="m-b-0">{{ user.name }}
+                    {% if me == user %}
+                    <sup><button type="button" class="btn btn-rounded btn-floating btn-link" style="padding:0px" data-toggle="modal" data-target="#edit_account_modal"><i class="fas fa-pen" style="font-size:12px;"></i></button></sup></h3>
+                    {% endif %}
+
+                <p>{% if user.type == 0 %}Client {% elif user.type == 1 %}Contractor{% else %}Corporate{% endif %}</p>
+
+                {% if user.username == me.username %}
+                <a href="{% url 'contracts_by_me' %}"><button class="m-t-10 waves-effect waves-dark btn btn-primary btn-md btn-rounded" data-abc="true">Contracts by Me</button></a>
+                {% elif user.type == 1 %}
+                <a href="{% url 'contracts_between' user.username %}"><button class="m-t-10 waves-effect waves-dark btn btn-primary btn-md btn-rounded" data-abc="true">Contact</button></a>
+                {% endif %}
+
+                <div class="row text-center m-t-20">
+                    <div class="col-lg-4 col-md-4 m-t-20">
+                        {% if user.type == 1 %}<h3 class="m-b-0 font-light">{{ user.contracts_count }}</h3><small>Contracts</small>{% elif user.type == 2 %}<h3 class="m-b-0 font-light">{{ user.transactions_count }}</h3><small>Transactions</small>{% endif %}
+                    </div>
+                    <div class="col-lg-4 col-md-4 m-t-20">
+                        <h3 class="m-b-0 font-light">{{ user.positive_reviews_count }}</h3><small>Positive Reviews</small>
+                    </div>
+                    <div class="col-lg-4 col-md-4 m-t-20">
+                        <h3 class="m-b-0 font-light">{{ user.negative_reviews_count }}</h3><small>Negative Reviews</small>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- MODAL FOR EDIT ACCOUNT SETTINGS -->
+<div class="modal fade" id="edit_account_modal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Account Settings</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+        <form action="{% url 'userpage' user.username %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+      <!-- Modal body -->
+      <div class="modal-body">
+
+     <label for="profile_photo"><b>Change Profile Photo</b><br>
+         <input name="profile_photo" type="file">
+     </label>
+
+      <label for="name"><b>Name</b><br>
+          <input type="text" name="name" placeholder="Name here" value="{{ me.name }}" style="padding:8px;"/>
+      </label>
+
+      <label for="email"><b>Email</b><br>
+          <input type="text" name="email" placeholder="Email here" value="{{ me.email }}" style="padding:8px;"/>
+      </label>
+
+      <label for="contact_number"><b>Phone #</b><br>
+          <input type="text" name="contact_number" placeholder="Contact no here" value="{{ me.contact_number }}" style="padding:8px;"/>
+      </label>
+
+      <label for="password"><b>Password</b><br>
+          <input type="password" name="password" placeholder="Password here" value="{{ me.password }}" style="padding:8px;"/>
+      </label>
+
+      <label for="password_again"><b>Again Password</b><br>
+          <input type="password" name="password_again" placeholder="Again password here" value="{{ me.password }}" style="padding:8px;"/>
+      </label>
+
+
+    <label for="account_type"><b>Who are you?</b><br>
+    <select name="account_type" style="padding:8px;" required>
+      <option value="" disabled selected>I am a ...</option>
+      <option value="0">Client</option>
+      <option value="1">Contractor</option>
+      <option value="2">Corporate</option>
+    </select>
+    </label>
+
+
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="submit" name="edit_account_settings" class="btn btn-success">UPDATE</button>
+      </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+<!-- :::::::::::::::::::::::::::::::::REVIEWS::::::::::::::::::::::::::::::::::::::::::::::: -->
+
+
+<style>
+.align-center {
+    text-align: center;
+}
+.hash-list {
+    display: block;
+    padding: 0;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px){
+    .hash-list.cols-3 > li:nth-last-child(-n+3) {
+        border-bottom: none;
+    }
+}
+@media (min-width: 768px){
+    .hash-list.cols-3 > li {
+        width: 33.3333%;
+    }
+}
+.hash-list > li {
+    display: block;
+    float: left;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.pad-30, .pad-30-all > * {
+    padding: 30px;
+}
+img {
+    border: 0;
+}
+.mgb-20, .mgb-20-all > * {
+    margin-bottom: 20px;
+}
+.wpx-100, .wpx-100-after:after {
+    width: 100px;
+}
+.img-round, .img-rel-round {
+    border-radius: 50%;
+}
+.padb-30, .padb-30-all > * {
+    padding-bottom: 30px;
+}
+
+.mgb-40, .mgb-40-all > * {
+    margin-bottom: 40px;
+}
+.align-center {
+    text-align: center;
+}
+[class*="line-b"] {
+    position: relative;
+    padding-bottom: 20px;
+    border-color: #E6AF2A;
+}
+.fg-text-d, .fg-hov-text-d:hover, .fg-active-text-d.active {
+    color: #222;
+}
+.font-cond-b {
+    font-weight: 700 !important;
+}
+</style>
+
+<div class="container">
+    <div class="mgb-10 padb-30 auto-invert line-b-4 align-center">
+        <h4 class="font-cond-l fg-accent lts-md mgb-10" contenteditable="false">Reviews</h4>
+        <button class="m-t-10 waves-effect waves-dark btn btn-secondary btn-rounded" data-abc="true" data-toggle="modal" data-target="#review_modal">Write a Review</button>
+        <!--<h1 class="font-cond-b fg-text-d lts-md fs-300 fs-300-xs no-mg" contenteditable="false">Read Customer Reviews</h1>-->
+    </div>
+      <div class="mgb-40 padb-30 auto-invert line-b-4 align-center">
+        <a href="{% url 'reviews' user.username %}" class="font-cond mgb-5 fg-text-d fs-130" contenteditable="false"><u>READ ALL REVIEWS</u></a>
+      </div>
+
+</div>
+
+<!-- MODAL FOR REVIEW WRITING -->
+<div class="modal fade" id="review_modal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Write a review</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+        <form action="{% url 'userpage' user.username %}" method="post">{% csrf_token %}
+      <!-- Modal body -->
+      <div class="modal-body">
+
+      <label for="review_text"><b>Review</b><br>
+          <textarea name="review_text" placeholder="Write your review here" class="form-control" cols="64" rows="6">{{ my_review.text }}</textarea>
+      </label>
+
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+          <input type="hidden" name="add_review"/>
+        <button type="submit" name="positive_review_button" class="btn btn-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></button>
+          <button type="submit" name="negative_review_button" class="btn btn-danger"><i class="fa fa-thumbs-down" aria-hidden="true"></i></button>
+      </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+<!-- :::::::::::::::::::::::::::::::::OFFERINGS/PRODUCTS::::::::::::::::::::::::::::::::::::::::::::::: -->
+{% if user.type == 1 %}
+
+<div class="container">
+    <div class="mgb-10 padb-30 auto-invert line-b-4 align-center">
+        {% if user == me %}
+        <h4 class="font-cond-l fg-accent lts-md mgb-10" contenteditable="false">My Offerings/Services <button type="button" class="btn btn-rounded btn-floating btn-link" data-toggle="modal" data-target="#edit_offerings"><i class="fas fa-pen"></i></button></h4>
+        {% else %}
+        <h4 class="font-cond-l fg-accent lts-md mgb-10" contenteditable="false">My Offerings/Services</h4>
+        {% endif %}
+    </div>
+
+    <p class="text-center" style="margin-left: 10%; margin-right: 10%; border: 1px solid #ccc; padding: 16px 16px 16px 16px; border-radius: 32px;">{{ user.offerings }}</p>
+
+</div>
+
+
+
+<div class="modal fade" id="edit_offerings">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Offerings</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+        <form action="{% url 'userpage' me.username %}" method="post">{% csrf_token %}
+      <!-- Modal body -->
+      <div class="modal-body">
+      <label for="offerings"><b>As a contactor, what do you offer?</b><br>
+          <textarea name="offerings" placeholder="Write in ndetail, what you offer to clients..." rows="12" cols="55">{{ me.offerings }}</textarea>
+      </label>
+      </div>
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="submit" name="update_offerings" class="btn btn-success">Update</button>
+      </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+{% elif user.type == 2 %}
+
+<div class="container">
+    <div class="mgb-10 padb-30 auto-invert line-b-4 align-center">
+        {% if user == me %}
+        <h4 class="font-cond-l fg-accent lts-md mgb-10" contenteditable="false">Our Products
+            <button type="button" class="btn btn-rounded btn-floating btn-link" data-toggle="modal" data-target="#add_product_modal"><i class="fas fa-plus"></i> ADD</button></h4>
+        {% else %}
+        <h4 class="font-cond-l fg-accent lts-md mgb-10" contenteditable="false">Our Products</h4>
+        {% endif %}
+    </div>
+</div>
+
+
+<!-- ADD PRODUCT -->
+<form id="add_product_form" action="{% url 'userpage' user.username %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+
+     <!-- The Modal: for transaction details -->
+<div class="modal fade" id="add_product_modal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Details</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+
+      <label for="name"><b>Name your product</b><br>
+          <input name="name" placeholder="e.g. Cement, Wood, Paint, etc."/>
+      </label>
+          <br>
+      <label for="description"><b>Description</b><br>
+          <textarea name="description" placeholder="Describe this product." class="form-control" cols="55" rows="6"></textarea>
+      </label>
+          <br>
+      <label for="price"><b>Price in PKR</b><br>
+          <input type="number" name="price" placeholder="Price in Rupees (PKR)"/>
+      </label>
+
+      <label for="photo"><b>Photo of this Product</b><br>
+          <input type="file" name="photo"/>
+      </label>
+
+
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="submit" name="add_product" class="btn btn-danger">Add</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</form>
+
+
+
+
+
+
+<!-- DISPLAY PRODUCT CARDS WITH ADD TO CART BTN HERE -->
+<!-- DISPLAY PRODUCT CARDS WITH ADD TO CART BTN HERE -->
+<!-- DISPLAY PRODUCT CARDS WITH ADD TO CART BTN HERE -->
+<!-- DISPLAY PRODUCT CARDS WITH ADD TO CART BTN HERE -->
+<!-- DISPLAY PRODUCT CARDS WITH ADD TO CART BTN HERE -->
+<!-- DISPLAY PRODUCT CARDS WITH ADD TO CART BTN HERE -->
+<!-- DISPLAY PRODUCT CARDS WITH ADD TO CART BTN HERE -->
+<!-- DISPLAY PRODUCT CARDS WITH ADD TO CART BTN HERE -->
+<style>
+/*  Helper Styles */
+
+    a {
+        text-decoration: none;
+    }
+
+    /* Card Styles */
+
+    .card-sl {
+        border-radius: 8px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        margin-bottom: 24px;
+
+    }
+
+    .card-image img {
+        max-height: 100%;
+        max-width: 100%;
+        border-radius: 8px 8px 0px 0;
+    }
+
+    .card-action {
+        position: relative;
+        float: right;
+        margin-top: -25px;
+        margin-right: 20px;
+        z-index: 2;
+        color: #E26D5C;
+        background: #fff;
+        border-radius: 100%;
+        padding: 15px;
+        font-size: 15px;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .card-action:hover {
+        color: #fff;
+        background: #E26D5C;
+        -webkit-animation: pulse 1.5s infinite;
+    }
+
+    .card-heading {
+        font-size: 18px;
+        font-weight: bold;
+        background: #fff;
+        padding: 10px 15px;
+    }
+
+    .card-text {
+        padding: 10px 15px;
+        background: #fff;
+        font-size: 14px;
+        color: #636262;
+    }
+
+    .card-button {
+        display: flex;
+        justify-content: center;
+        padding: 10px 0;
+        width: 100%;
+        background-color: #1F487E;
+        color: #fff;
+        border-radius: 0 0 8px 8px;
+    }
+
+    .card-button:hover {
+        text-decoration: none;
+        background-color: #1D3461;
+        color: #fff;
+
+    }
+
+
+    @-webkit-keyframes pulse {
+        0% {
+            -moz-transform: scale(0.9);
+            -ms-transform: scale(0.9);
+            -webkit-transform: scale(0.9);
+            transform: scale(0.9);
+        }
+
+        70% {
+            -moz-transform: scale(1);
+            -ms-transform: scale(1);
+            -webkit-transform: scale(1);
+            transform: scale(1);
+            box-shadow: 0 0 0 50px rgba(90, 153, 212, 0);
+        }
+
+        100% {
+            -moz-transform: scale(0.9);
+            -ms-transform: scale(0.9);
+            -webkit-transform: scale(0.9);
+            transform: scale(0.9);
+            box-shadow: 0 0 0 0 rgba(90, 153, 212, 0);
+        }
+    }
+</style>
+
+
+
+  <script>
+
+  var selected_services_count = 0;
+
+    function add_to_cart(what){
+      if (document.getElementById(what+'btn').style.opacity == 0.6){
+        document.getElementById(what+'btn').style.opacity = 1.0;
+        document.getElementById(what).value = '';
+        selected_services_count -= 1;
+        document.getElementById('buy_button').disabled = true;
+      }
+      else {
+        document.getElementById(what+'btn').style.opacity = 0.6;
+        document.getElementById(what).value = 'true';
+        selected_services_count += 1;
+        document.getElementById('buy_button').disabled = false;
+      }
+    }
+  </script>
+
+  <div class="container" style="margin-top:50px;">
+        <div class="row">
+
+        {% for product in user.product_by_user_set.all %}
+            <div class="col-md-3">
+                <div class="card-sl" style="margin-bottom:16px;">
+                    <div class="card-image">
+                        <img
+                            src="{{ product.product_photo_url }}" width="300" height="300" />
+                    </div>
+
+                    {% if user == me %}
+                    <form action="{% url 'userpage' me.username %}" method="post">{% csrf_token %}
+                    <input type="hidden" name="delete_product" value="{{ product.pk }}"/>
+                    <button type="submit" class="btn card-action"><i class="fa fa-trash"></i></button>
+                    </form>
+                    {% endif %}
+
+                    <div class="card-heading">
+                        {{ product.name }}
+                    </div>
+                    <div class="card-text">
+                        {{ product.text }}
+                    </div>
+                    <div class="card-text">
+                        {{ product.price }} Rs
+                    </div>
+                    <input form="transaction_form" type="hidden" id="{{ product.pk }}" name="{{ product.pk }}" value=""/>
+                    <button form="transaction_form" id="{{ product.pk }}btn" type="button" class="card-button btn" onclick="add_to_cart('{{ product.pk }}')"> Add to Cart</button>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+
+
+
+<form id="transaction_form" action="{% url 'userpage' user.username %}" method="post">{% csrf_token %}
+
+     <!-- The Modal: for transaction details -->
+<div class="modal fade" id="details_modal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Details</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+
+      <label for="contract_id"><b>Buying for which contract?</b><br>
+          <input type="number" name="contract_id" placeholder="Contract ID here, eg. 17"/>
+      </label>
+          <br>
+      <label for="transaction_text"><b>Description</b><br>
+          <textarea name="transaction_text" placeholder="Describe what you want?" class="form-control" cols="64" rows="6"></textarea>
+      </label>
+
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="submit" name="transaction" class="btn btn-danger">Confirm</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</form>
+<!---------------->
+  <!---------------->
+  <!---------------->
+  <!---------------->
+
+                      <style>
+.float{
+	position:fixed;
+	width:80px;
+	height:80px;
+	bottom:40px;
+	right:40px;
+	background-color:#0C9;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+}
+                </style>
+    <button id="buy_button" disabled class="btn float" data-toggle="modal" data-target="#details_modal" style="font-size:22px;">Buy!</button>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endif %}
+
+{% include './components/footer.html' %}
+
+</body>
+</html>

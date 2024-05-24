@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+
+{% load static %}
+
+{% if password_not_matching_error %}
+<script> alert("Two passwords do not match! Try writing again.") </script>
+{% endif %}
+
+{% if user_already_exists_error %}
+<script> alert("This username already exists. Try using a different username!") </script>
+{% endif %}
+
+<!---------------------------------------------------------------------------------------->
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{% static 'font_awesome5/css/all.min.css' %}">
+
+
+<head>
+
+<style>
+body {
+  animation: fadeInAnimation ease 0.5s;
+  animation-iteration-count: 1;
+  // animation-fill-mode: forwards;
+  }
+  @keyframes fadeInAnimation {
+    0% {
+      // opacity: 0;
+      filter: blur(64px); // this causes navbar to go down
+    }
+    100% {
+      // opacity: 1;
+      filter: blur(0px);
+    }
+}
+
+  /* Split the screen in half */
+.split {
+  height: 100%;
+  width: 60%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+/* Control the left side */
+.left {
+  left: 0;
+  // background-color: #111;
+
+  // position: relative;
+  // background-attachment: fixed;
+  z-index: -1;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url("{% static 'cityscape.jpg' %}");
+}
+
+/* Control the right side */
+.right {
+  right: 0;
+  // background-color: white;
+}
+
+.bgimg {
+    width: 100%;
+    height: 30vh;
+    background-image: url({% static 'home-better.jpg' %});
+    background-position: center top;
+	background-size:cover;
+}
+</style>
+
+
+
+</head>
+
+<body>
+{% include './components/navbar.html' %}
+<!--------------------------------------------------------------------------------->
+<section class="bgimg" style="position: relative;">
+</section>
+<!--------------------------------------------------------------------------------->
+
+<style>
+.signup_form {
+  //float: right;
+  max-width: 400px;
+  margin: auto;
+  border-radius: 4px;
+  //margin-right: 20px; /*what ever you want*/
+  //margin-top:100px;
+  text-align: center;
+
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+}
+
+</style>
+
+
+<script>
+ $(document).ready(function(){
+    $('select').formSelect();
+ });
+</script>
+
+<br>
+
+<form class="signup_form" action="{% url 'signup' %}" method="post"> {% csrf_token %}
+  <div class="container">
+    <h2>Signup</h2>
+
+
+    <label for="name"><b>Full Name</b><br>
+    <input name="name" type="text" placeholder="Enter your name" maxlength="32" style="padding:8px;" required>
+      </label>
+
+    <label for="username"><b>Username (you cannot change it later)</b><br>
+    <input name="username" type="text" placeholder="Enter Username" maxlength="32" style="padding:8px;" required>
+      </label>
+
+    <label for="email"><b>Email</b><br>
+    <input name="email" type="email" placeholder="Enter your email" style="padding:8px;" required>
+      </label>
+
+    <label for="contact_number"><b>Contact #</b><br>
+    <input name="contact_number" type="text" placeholder="123 456789 0" style="padding:8px;" required>
+      </label>
+
+    <label for="password"><b>Password</b><br>
+    <input name="password" type="password" placeholder="Enter Password" maxlength="32" style="padding:8px;" required>
+      </label>
+    <label for="password_again"><b>Again Password</b><br>
+    <input name="password_again" type="password" placeholder="Enter Password again" maxlength="32" style="padding:8px;" required>
+      </label>
+
+
+  <div class="input-field col s12">
+    <label for="account_type"><b>Who are you?</b><br>
+    <select name="account_type" style="padding:8px;" required>
+      <option value="" disabled selected>I am a ...</option>
+      <option value="0">Client</option>
+      <option value="1">Contractor</option>
+      <option value="2">Corporate</option>
+    </select>
+    </label>
+  </div>
+
+    <button type="submit" class="btn btn-dark">Signup</button>
+  </div>
+
+  <div class="container" style="background-color: #ccc;margin-top:16px;">
+    <a href="{% url 'index' %}">Already have an account?</a>
+  </div>
+</form>
+
+<script>
+  function forgot_password_action(){
+    alert("We cant do anything. Try remembering it!")
+  }
+</script>
+
+<!---------------------------------------------------------------------------------------------->
+
+<!---------------------------------------------------------------------------------------------->
+<!--
+<style>
+img {
+  // background: rgba(19, 35, 47, 0.9);
+  padding: 64px;
+  max-width: 400px;
+  // margin: 1px auto;
+  border-radius: 50%;
+  // box-shadow: 0 4px 4px 4px rgba(19, 35, 47, 0.3);
+  // margin-right: 20px; /*what ever you want*/
+
+}
+</style>
+
+
+<h1 style="font-family: Arial, Helvetica, sans-serif; margin 4px auto; float: left;">Contact one of the most reputed contractors!</h1>
+<img src="{% static 'house_photo.jpg' %}" alt="house" style="width:400px;">
+-->
+<!---------------------------------------------------------------------------------------------->
+
+  <!------------------------------------------------------------------------------------------->
+
+
+
+
+
+<!----------------------------------------------------------------------------->
+
+<!----------------------------------------------------------------------------->
+
+<!-- Footer
+
+<style>
+  .footer {
+  overflow: hidden;
+  background-color: #333;
+  // position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 200px;
+}
+
+.footer a, i {
+  // float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  left: 50%;
+  right: 50%;
+}
+
+.footer a:hover {
+  background: #ddd;
+  color: black;
+}
+</style>
+
+
+<div class="footer">
+  <a href="{% url 'about' %}">About Us</a>
+  <a href="">Contact Us</a>
+  </div>
+
+-->
+
+<!----------------------------------------------------------------------------->
+{% include './components/footer.html' %}
+<!----- END FOOTER --------------------->
+
+</body>
+</html>

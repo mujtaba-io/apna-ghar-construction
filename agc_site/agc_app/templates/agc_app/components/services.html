@@ -1,0 +1,155 @@
+
+<!-- BUY BUTTON WITH PRODUCT CARDS -->
+
+{% load static %}
+
+<style>
+
+/* Float four columns side by side */
+.services-column {
+ float: left;
+ width: 49%;
+ display: block;
+ margin-bottom: 10px;
+ padding: 0.5% 0.5%;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 1000px) {
+ .services-column {
+ width: 100%;
+ display: block;
+ margin-bottom: 10px;
+ }
+}
+
+.services-row {margin: 0 -5px;}
+
+/* Clear floats after the columns */
+.services-row:after {
+ content: "";
+ display: table;
+ clear: both;
+}
+
+/* Style the counter cards */
+.services-card {
+ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+ padding: 16px;
+ text-align: center;
+ background-color: #161B1F; // #444;
+ color: white;
+ border-radius: 4px;
+}
+
+.services-card .fa {font-size:50px;}
+
+.service-photo {
+ width: 532px;
+ height: 532px;
+}
+
+.service-name {
+ color: #ccc;
+}
+
+.service-price {
+ color: #aaa;
+}
+
+.service-description {
+ height: 262px;
+}
+
+.contact-button {
+ border-radius: 8px;
+ border: 1px solid #ccc;
+ outline: 0;
+ padding: 12px;
+ color: #ccc;
+ background-color: #161B1F;
+ text-align: center;
+ cursor: pointer;
+ width: 100%;
+ font-size: 18px;
+ transition: background-color 1s ease;
+}
+.contact-button:hover {
+ border: 1px solid #161B1F;
+ color: #161B1F;
+ background-color: #ccc;
+}
+
+
+.services-column input[type=text], input[type=password], textarea {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  box-sizing: border-box;
+  background-color: #161B1F;
+  color: #ccc;
+}
+
+</style>
+
+<div class="services-row">
+
+ <h1>Their Services</h1>
+
+ {% for service in services %}
+
+ <form action="{% url 'userpage' user.username %}" method="post"> {% csrf_token %}
+ <div class="services-column">
+ <div class="services-card">
+
+    {% if user.username == me.username %}
+ <form action="{% url 'userpage' user.username %}" method="post"> {% csrf_token %}
+  <input type="hidden" name="service_name" value="{{ service.name }}">
+  <button name="remove_service" style="font-size: 18px; background-color: #161B1F; color: #ccc; border: 1px solid #ccc;" type="submit"><b>REMOVE THIS?</b></button>
+ </form>
+ {% endif %}
+
+  <h2 class="service-name">{{ service.type.name }}</h2>
+ <p><img class="service-photo" src="{{ service.photo_url }}"/></p>
+  <p class="service-price">Description</p>
+  <p class="service-description">{{ service.description }}</p>
+  <input type="hidden" name="{{ service.name }}"/>
+  <p><button name="contact_for_service" class="contact-button">Contact for this</button></p>
+ </div>
+ </div>
+ </form>
+
+ {% endfor %}
+
+ {% if user.username == me.username %}
+
+  <form action="{% url 'userpage' user.username %}" method="post" enctype="multipart/form-data"> {% csrf_token %}
+ <div class="services-column">
+ <div class="services-card">
+
+  <h3>Add your Service(s) Here!</h3>
+
+  <h5>What service do you offer?</h5>
+  <select name="service_name" style="padding: 8px;" required>
+      {% for service in all_services %}
+       <option value="{{ service.name }}">{{ service.name }}</option>
+      {% endfor %}
+    </select>
+
+  <h5>Upload a photo showing your work</h5>
+ <input name="service_photo" type="file" required/>
+
+  <p class="service-price">Description</p>
+  <textarea name="service_description" placeholder="Describe what you can offer, your prices, location in detail" style="resize: none" rows="36" required></textarea>
+  <p class="service-price">*Clients will contact you for your services. If a client contacts you, it will be considered a  Contract by our servers.</p>
+  <p><button name="add_service" class="contact-button">Add new Service</button></p>
+ </div>
+ </div>
+ </form>
+
+ {% endif %}
+
+</div>

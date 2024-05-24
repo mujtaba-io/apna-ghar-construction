@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+<!-- TODO: CHANGE THE ENTIRE PAGE LAYOUT -->
+
+{% load static %}
+
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="{% static 'font_awesome5/css/all.min.css' %}">
+  <!-------------------------------------------------------------------------------------------->
+
+  <!-------------------------------------------------------------------------------------------->
+
+  <style>
+body {
+  margin:0;
+  animation: fadeInAnimation ease 0.5s;
+  animation-iteration-count: 1;
+  // animation-fill-mode: forwards;
+  }
+  @keyframes fadeInAnimation {
+    0% {
+      // opacity: 0;
+      filter: blur(64px);
+    }
+    100% {
+      // opacity: 1;
+      filter: blur(0px);
+    }
+}
+
+.navbar {
+  overflow: hidden;
+  background-color: #73AEBA; // #333;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.navbar a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.navbar a:hover {
+  background: #ddd;
+  color: black;
+}
+
+.navbar .active {
+  background-color: #73AEBA;
+}
+
+.navbar input[type=text] {
+  padding: 6px;
+  border: none;
+  margin-top: 8px;
+  margin-right: 16px;
+  margin-left: 16px;
+  font-size: 17px;
+  border-radius: 32px;
+}
+
+.main {
+  padding: 16px;
+  margin-top: 30px;
+  height: 1500px; /* Used in this example to enable scrolling */
+}
+</style>
+
+<script>
+function open_menu() {
+  var x = document.getElementById("menu_links");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+</script>
+
+<div class="navbar">
+  <a class="active" href="{% url 'feed' %}"><i class="fa fa-fw fa-home"></i></a>
+  <input type="text" placeholder="search..."/>
+
+
+  <a href="javascript:void(0);" class="icon" onclick="open_menu()" style="float: right">
+    <i class="fa fa-bars"></i>
+  </a>
+  <div id="menu_links" style="float: right">
+    <a href="{% url 'userpage' me.username %}">Profile</a>
+    <a href="{% url 'settings' %}">Settings</a>
+    <a href="{% url 'about' %}">About</a>
+    <a href="{% url 'logout' %}">Logout</a>
+  </div>
+
+  <a href="{% url 'conversations' %}" style="float: right"><i class="fa fa-fw fa-envelope"></i></a>
+</div>
+
+</head>
+
+<body>
+
+<div class="main">
+
+
+
+  <!-------------------------------------------------------------------------------------------->
+
+  <!-------------------------------------------------------------------------------------------->
+
+<!--
+<style>
+
+.container {
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.darker {
+  border-color: #ccc;
+  background-color: #ddd;
+}
+
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.container img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+.container img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+
+.time-right {
+  float: right;
+  color: #aaa;
+}
+
+.time-left {
+  float: left;
+  color: #999;
+}
+
+
+
+.back_button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #333; // #CA3B3B;
+  text-align: center;
+  cursor: pointer;
+  width: 50%;
+  margin: 0 128px 0 10px;
+  font-size: 16px;
+}
+
+.back_button:hover {
+  opacity: 0.7;
+
+}
+
+</style>
+
+<h2>Your Conversations</h2>
+<a href="{% url 'userpage' me.username %}"><button class="back_button" style="width: 25%;">Back</button></a>
+<hr>
+
+  <button type="submit" style="width: 100%">
+  <div class="container darker">
+  <img src="{% static 'avatar.png' %}" alt="Avatar" class="right" style="width:100%;">
+  <h4>With John Doe</h4>
+  <span class="time-left">11:05</span>
+</div>
+    </button>
+
+  <button type="submit" style="width: 100%">
+  <div class="container darker">
+  <img src="{% static 'avatar.png' %}" alt="Avatar" class="right" style="width:100%;">
+  <h4>With John Doe</h4>
+  <span class="time-left">11:05</span>
+</div>
+    </button>
+
+  <button type="submit" style="width: 100%">
+  <div class="container darker">
+  <img src="{% static 'avatar.png' %}" alt="Avatar" class="right" style="width:100%;">
+  <h4>With John Doe</h4>
+  <span class="time-left">11:05</span>
+</div>
+    </button>
+
+  <button type="submit" style="width: 100%">
+  <div class="container darker">
+  <img src="{% static 'avatar.png' %}" alt="Avatar" class="right" style="width:100%;">
+  <h4>With John Doe</h4>
+  <span class="time-left">11:05</span>
+</div>
+    </button>
+-->
+
+
+</div>
+
+</body>
+</html>

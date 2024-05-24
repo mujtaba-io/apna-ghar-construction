@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {%  include './components/back_nav.html' %}
+</head>
+
+
+<body style="min-height: 100vh;">
+
+
+<section style="color: #000; background-color: #f3f2f2;">
+  <div class="container py-5">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-10 col-xl-8 text-center">
+        <h3 class="fw-bold mb-4">Reviews</h3>
+        <p class="mb-4 pb-2 mb-md-5 pb-md-0">
+          All reviews to <b>{{ user.name }}</b> are shown here.
+        </p>
+      </div>
+    </div>
+
+<hr>
+<div class="row text-center m-t-20">
+  <div class="col-lg-4 col-md-4 m-t-20">
+    {% if user.type == 1 %}<h3 class="m-b-0 font-light" style="color: #666;">{{ user.contracts_count }}</h3><small style="color: #666;">Contracts</small>{% elif user.type == 2 %}<h3 class="m-b-0 font-light" style="color: #666;">{{ user.transactions_count }}</h3><small style="color: #666;">Transactions</small>{% endif %}
+  </div>
+  <div class="col-lg-4 col-md-4 m-t-20">
+    <h3 class="m-b-0 font-light" style="color: #666;">{{ user.positive_reviews_count }}</h3><small style="color: #666;">Positive Reviews</small>
+  </div>
+  <div class="col-lg-4 col-md-4 m-t-20">
+    <h3 class="m-b-0 font-light" style="color: #666;">{{ user.negative_reviews_count }}</h3><small style="color: #666;">Negative Reviews</small>
+  </div>
+</div>
+<hr>
+
+    <div class="row text-center">
+
+      {% for review in reviews %}
+      <div class="col-md-4 mb-4 mb-md-0">
+        <div class="card">
+          <div class="card-body py-4 mt-2">
+            <div class="d-flex justify-content-center mb-4">
+              <img
+                src="{{ review.by_user.profile_photo }}"
+                class="rounded-circle shadow-1-strong"
+                width="128"
+                height="128"
+              />
+            </div>
+            <h5 class="font-weight-bold">{{ review.by_user.name }}</h5>
+            <h6 class="font-weight-bold my-3">@{{ review.by_user.username }}</h6>
+            <p class="mb-2">
+              {% if review.is_positive %}<i class="fas fa-quote-left pe-2" style="color:green"></i> <i class="fa fa-thumbs-up" style="color:green">: </i>
+              {% else %}<i class="fas fa-quote-left pe-2" style="color:red"></i> <i class="fa fa-thumbs-down" style="color:red">: </i>{% endif %}
+              {{ review.text }}
+            </p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+
+
+
+    </div>
+  </div>
+
+</section>
+
+
+
+{% include './components/footer.html' %}
+</body>
+</html>
